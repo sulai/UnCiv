@@ -262,26 +262,19 @@ class WorldScreen : CameraStageBaseScreen() {
                     throw ex
                 }
 
-                val gameInfoClone = gameInfo.clone()
-                kotlin.concurrent.thread {
-                    // the save takes a long time (up to a second!) and we can do it while the player continues his game.
-                    // On the other hand if we alter the game data while it's being serialized we could get a concurrent modification exception.
-                    // So what we do is we clone all the game data and serialize the clone.
-                    if(gameInfo.turns % game.settings.turnsBetweenAutosaves == 0)
-                        try {
-                            GameSaver().saveGame(gameInfoClone, "Autosave")
-                        } catch (ex: Exception) {
-                            Gdx.app.postRunnable {
-                                currentPlayerCiv.addNotification("Autosave failed.", null, Color.RED)
-                                shouldUpdate=true
-                            }
+                if(gameInfo.turns % game.settings.turnsBetweenAutosaves == 0) {
+                    try {
+                        GameSaver().autoSave(gameInfo) {
+                            nextTurnButton.enable() // only enable the user to next turn once we've saved the current one
+                            updateNextTurnButton()
                         }
-                    // do this on main thread
-                    Gdx.app.postRunnable {
-                        nextTurnButton.enable() // only enable the user to next turn once we've saved the current one
-                        updateNextTurnButton()
                     }
-
+                    catch (ex: Exception) {
+                        Gdx.app.postRunnable {
+                            currentPlayerCiv.addNotification("Autosave failed.", null, Color.RED)
+                            shouldUpdate=true
+                        }
+                    }
                 }
 
                 // If we put this BEFORE the save game, then we try to save the game...
