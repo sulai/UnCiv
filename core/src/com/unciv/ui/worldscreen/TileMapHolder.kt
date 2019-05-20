@@ -58,6 +58,8 @@ class TileMapHolder(internal val worldScreen: WorldScreen, internal val tileMap:
             var lastInitialDistance = 0f
 
             override fun zoom(event: InputEvent?, initialDistance: Float, distance: Float) {
+                // deselect any unit, as zooming occasionally forwards clicks on to the map
+                worldScreen.bottomBar.unitTable.selectedUnit = null
                 if (lastInitialDistance != initialDistance) {
                     lastInitialDistance = initialDistance
                     lastScale = scaleX
@@ -100,7 +102,7 @@ class TileMapHolder(internal val worldScreen: WorldScreen, internal val tileMap:
             val turnsToGetThere = selectedUnit.movementAlgs().getShortestPath(tileInfo).size // this is what takes the most time, tbh
 
             Gdx.app.postRunnable {
-                if(turnsToGetThere==1) {
+                if(UnCivGame.Current.settings.singleTapMove && turnsToGetThere==1) {
                     // single turn instant move
                     selectedUnit.movementAlgs().headTowards(tileInfo)
                 } else {
@@ -222,7 +224,7 @@ class TileMapHolder(internal val worldScreen: WorldScreen, internal val tileMap:
 
         for (tile: TileInfo in unit.getDistanceToTiles().keys)
             if (unit.canMoveTo(tile))
-                tileGroups[tile]!!.showCircle(Color.WHITE, 0.7f)
+                tileGroups[tile]!!.showCircle(Color.WHITE, if (UnCivGame.Current.settings.singleTapMove) 0.7f else 0.3f)
 
         val unitType = unit.type
         val attackableTiles: List<TileInfo> = when {
