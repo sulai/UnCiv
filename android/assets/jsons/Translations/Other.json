@@ -2583,7 +2583,11 @@
 		Simplified_Chinese:"再见。"
 		Portuguese:"Adeus."
 	}
-	
+
+	"Sounds good!":{
+		Italian:"Sta bene!"
+	}
+
 	"Not this time.":{ // declining trade text
 		Italian:"Non questa volta."
 		Simplified_Chinese:"这次不行，我只和有诚意的人交易。"
@@ -2620,7 +2624,6 @@
 	}
 
 	"We have encountered the City-State of [name]!":{ // e.g. the Cultured city state of Vienna
-
 		Italian:"Abbiamo incontrato la Citta-Stato di [name]!"
 		Portuguese:"Nós encontramos a cidade-estado de [name]"
 
