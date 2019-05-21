@@ -40,7 +40,6 @@ class CityButton(val city: CityInfo, internal val tileGroup: WorldTileGroup, ski
 
             // So you can click anywhere on the button to go to the city
             touchable = Touchable.enabled
-            label.touchable = Touchable.enabled
 
             // clicking swings the button a little down to allow selection of units there.
             // this also allows to target selected units to move to the city tile from elsewhere.
@@ -103,7 +102,6 @@ class CityButton(val city: CityInfo, internal val tileGroup: WorldTileGroup, ski
         pack()
         setOrigin(Align.center)
         centerX(tileGroup)
-        touchable = Touchable.enabled
     }
 
     private fun moveButtonDown() {
